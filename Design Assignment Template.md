@@ -9,7 +9,7 @@
 <Write a brief overview of the system architecture and include a block diagram. An example is provide below. Make sure to identify and describe each node and component on the diagram. A table may be used for this>
 A high-level deployment diagram for the envisioned system is shown in Figure 1.
 
-![An example system deployment diagram using UML2](images/Block Diagram Example.png)
+![An example system deployment diagram using UML2](images/Block_Diagram_Example.png)
 Figure 1 An example system deployment diagram using UML2
 
 As mentioned in the introduction, the main function of the system is to control motor rotation direction based on a single input control signal. The name and purpose of each of the nodes and components shown in Figure 1 are summarize in Table 1 below.
@@ -53,7 +53,7 @@ Each of the main design tasks related to the architecture are summarized in the 
 <Show a UML messaging diagram that illustrates the interaction between the ADC, DMA peripheral, and CPU>
 The interaction between the ADC, DMA peripheral, and CPU is illustrated in the messaging diagram of Figure 2.
 
-![An example messaging diagram](images/UML Messaging template.png)
+![An example messaging diagram](images/UML_Messaging_template.png)
 Figure 2 An example messaging diagram
 
 ### 3. Interrupt and Processing Strategy
