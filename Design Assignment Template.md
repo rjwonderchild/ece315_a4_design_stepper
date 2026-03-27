@@ -2,7 +2,7 @@
 
 <any text between angle brackets is informational and should be deleted in the final version of the report.>
 
-##Introduction
+## Introduction
 <summarize the problem, objectives, and approach to this assignment>
 
 ## System Overview
