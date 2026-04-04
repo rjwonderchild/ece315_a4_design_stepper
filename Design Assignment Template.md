@@ -88,9 +88,25 @@ Anti-aliasing filters are almost always recommended for ADC sampling, pickup fro
 ### 2. DMA-Based Data Acquisition
 Recall design constraints for ADC:
 1. ADC resolution: 12 bits
-
-Note that the faster the ADC samples, the fewer the number of bit out. N-bit ADC can quantize the input signal to $$2^N$$ levels.   
+2. Note that the faster the ADC samples, the fewer the number of bit out. N-bit ADC can quantize the input signal to $$2^N$$ levels.   
 We also note that the digital output range is approximately $$[-2^{N-1}, 2^{N-1} \space volts]$$.
+3. The RP2040 DMA features are: 12 independent DMA channels, separate read/write bus masters, transfer 8/16/32-bit words with one read+write per cycle, supports
+   paced (TREQ), and 100s MB/s throughput.
+
+**Part 2.1**
+Reviewing the RP2040 data sheet, the ECE315 Lecture notes, we find that the ADC will continously be sampled, where the sample data is pushed to the ADC FIFO,
+and then the DMA moves the data from the FIFO to a RAM buffer, and when a block is full the DMA signals to the CPU with an interrupt.
+
+* The source for the DMA is the ADC FIFO register. From the datasheet the ADC_BASE is at *0x4004C00* with the ADC_FIFO at *0x4004C00C which is the source address
+* When sending the data, the DMA will send this to a RAM buffer (array inside the RAM or the *block*), in this case we will use SRAM0 which will be the destination of the
+  data at address *0x21000000*
+
+**Part 2.2**
+
+**Part 2.3**
+
+**Part 2.4**
+
    
 <Show a UML messaging diagram that illustrates the interaction between the ADC, DMA peripheral, and CPU>
 The interaction between the ADC, DMA peripheral, and CPU is illustrated in the messaging diagram of Figure 2.
