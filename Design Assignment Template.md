@@ -56,7 +56,7 @@ With these constraints in mind, we first find the minimum sampling rate. Here, w
 $f_{max}$ can be reconstructed perfectly where: $$f_s \geq 2 f_{max}$$, and need anti-aliasing filters to ensure $$\frac{f_s}{2} \geq f_{max}$$. Apply rule-of-thumb: sample **2-10x** $f_{max}$ for margin & filter roll-off.
 
 
-The Nyquist Frequency is $$f_N \geq \frac{f_s}{2}$$, where frequencies that exceed the Nyquist frequency will undergo Anti-Aliasing.
+The Nyquist Frequency is $$f_N \geq \frac{f_s}{2}$$, where input frequencies that exceed the Nyquist frequency will undergo Aliasing.
 
 ### 2. DMA-Based Data Acquisition
 
