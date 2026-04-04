@@ -61,6 +61,14 @@ $f_{max}$ can be reconstructed perfectly where: $$f_s \geq 2 f_{max}$$, and need
 * The new Nyquist Frequency is $$f_N \geq \frac{f_s}{2}$$, thus $$f_N = \frac{6 kS/s}{2} = 3 kS/s = 3 kHz
 * Rate was choosen to help with design overhead (margin), reduce aliasing folding, use of anti-alias filter, keep system cost low
 
+We are then told the ADC samples 4 analogue channels in roun-robin mode, need to determine an effective per-channel sampling rate. We note that for the RP2040,
+the ADC is set for muliple inputs and can utilize round-robin sampling. From the documentaiton, the RP2040 has only one ADC FIFO, so the sample from each source
+(channel) are placed into the FIFO in an interleaved fashion, which must later be de-interleaved.
+
+* To find the sample rate per channel, we use $$f_{per \space channel} = \frac{f_s}{M}$$ where M is the number of channels.
+* Four channels to sample: $$f_{per \space channel} = \frac{6 kS/s}{4} = 1.5 kS/s$$.
+* This is below the input range of 0-2 kHz for sampling, thus, we need to re-evaluate our total sampling rate.
+
 
 
 
@@ -92,3 +100,7 @@ ECE315 Lecture Notes
 [1] https://www.ti.com/lit/an/slyt626/slyt626.pdf?ts=1775333427164&ref_url=https%253A%252F%252Fwww.google.com%252F   
 [2] https://www.ni.com/en/shop/data-acquisition/measurement-fundamentals/analog-fundamentals/anti-aliasing-filters-and-their-usage-explained.html   
 [3] https://www.youtube.com/watch?v=Sv_wMr9_Mwk
+[4] https://forums.ni.com/t5/Multifunction-DAQ/what-do-you-mean-by-MS-s-or-KS-s-as-unit-of-frequency-I-m-used/td-p/925278   
+[5] https://forums.ni.com/t5/Multifunction-DAQ/What-is-the-unit-kS-s-stand-for/m-p/4258344#M10295   
+[6] https://pip-assets.raspberrypi.com/categories/814-rp2040/documents/RP-008371-DS-1-rp2040-datasheet.pdf?disposition=inline   
+
