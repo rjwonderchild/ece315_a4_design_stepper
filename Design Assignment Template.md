@@ -78,3 +78,10 @@ Figure 2 An example messaging diagram
 ## AI Usage Declaration
 
 <Please indicate if you used an AI to help with this assignment and if so, what insights you gained; for example how it helped you understand this assignment>
+
+## Resources
+
+ECE315 Lecture Notes
+[1] https://www.ti.com/lit/an/slyt626/slyt626.pdf?ts=1775333427164&ref_url=https%253A%252F%252Fwww.google.com%252F   
+[2] https://www.ni.com/en/shop/data-acquisition/measurement-fundamentals/analog-fundamentals/anti-aliasing-filters-and-their-usage-explained.html   
+[3] https://www.youtube.com/watch?v=Sv_wMr9_Mwk
