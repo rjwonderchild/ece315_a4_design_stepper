@@ -53,7 +53,7 @@ Recall design constraints for ADC and sampling:
 3. Maximum allowed event-to-response latency: 2ms
 
 With these constraints in mind, we first find the minimum sampling rate. Here, we apply Nyquist-Shannon Sampling Theorem, which states bandlimited frequencys with
-$f_{max}$ can be reconstructed perfectly where: $$f_s geq 2 f_{max}$$, and need anti-aliasing filters to ensure $$\frac{f_s}{2} \geq f_{max}$$. Apply rule-of-thumb: sample **2-10x** $f_{max}$ for margin & filter roll-off.
+$f_{max}$ can be reconstructed perfectly where: $$f_s geq 2 f_{max}$$, and need anti-aliasing filters to ensure $$\frac{f_s}{2} \space \geq \space f_{max}$$. Apply rule-of-thumb: sample **2-10x** $f_{max}$ for margin & filter roll-off.
 
 ### 2. DMA-Based Data Acquisition
 
