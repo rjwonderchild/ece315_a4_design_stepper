@@ -81,7 +81,7 @@ Figure 2 An example messaging diagram
 
 ## Resources
 
-ECE315 Lecture Notes
+ECE315 Lecture Notes   
 [1] https://www.ti.com/lit/an/slyt626/slyt626.pdf?ts=1775333427164&ref_url=https%253A%252F%252Fwww.google.com%252F   
 [2] https://www.ni.com/en/shop/data-acquisition/measurement-fundamentals/analog-fundamentals/anti-aliasing-filters-and-their-usage-explained.html   
 [3] https://www.youtube.com/watch?v=Sv_wMr9_Mwk
