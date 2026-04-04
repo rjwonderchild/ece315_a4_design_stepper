@@ -49,9 +49,8 @@ Each of the main design tasks related to the architecture are summarized in the 
 ### 1. ADC and Sampling Design
 Recall design constraints for ADC and sampling:
 1. Analogue input bandwidth: 0-2 kHz
-2. ADC resolution: 12 bits
-3. Maximum allowed event-to-response latency: 2ms
 
+**Part 1.1**
 With these constraints in mind, we first find the minimum sampling rate. Here, we apply Nyquist-Shannon Sampling Theorem, which states bandlimited frequencys with
 $f_{max}$ can be reconstructed perfectly where: $$f_s \geq 2 f_{max}$$, and need anti-aliasing filters to ensure $$\frac{f_s}{2} \geq f_{max}$$. Apply rule-of-thumb: sample **2-10x** $f_{max}$ for margin & filter roll-off.
 
@@ -61,6 +60,7 @@ $f_{max}$ can be reconstructed perfectly where: $$f_s \geq 2 f_{max}$$, and need
 * The new Nyquist Frequency is $$f_N \geq \frac{f_s}{2}$$, thus $$f_N = \frac{6 kS/s}{2} = 3 kS/s = 3 kHz
 * Rate was choosen to help with design overhead (margin), reduce aliasing folding, use of anti-alias filter, keep system cost low
 
+**Part 1.2**
 We are then told the ADC samples 4 analogue channels in roun-robin mode, need to determine an effective per-channel sampling rate. We note that for the RP2040,
 the ADC is set for muliple inputs and can utilize round-robin sampling. From the documentaiton, the RP2040 has only one ADC FIFO, so the sample from each source
 (channel) are placed into the FIFO in an interleaved fashion, which must later be de-interleaved.
@@ -75,6 +75,7 @@ the ADC is set for muliple inputs and can utilize round-robin sampling. From the
   is affected by the resolution (bit depth), time (sampling rate, jitter), noise (thermal), etc. Thus, by increaseing the sample rate for the per channel, the
   fidelity increases, and minimizes distortion.
 
+**Part 1.3**
 Anti-aliasing filters are almost always recommended for ADC sampling, pickup from stray signals (powerline frequency or even local radio stations!) may contain such frequencies higher than the Nyquist Frequency, and thus these frequencies may alias into the appropriate frequency range.
 
 * We use filters to anti-alias sampling for ADCs, in our design we wouldnt necessarily need one, but we will implement one for good practice
@@ -82,13 +83,15 @@ Anti-aliasing filters are almost always recommended for ADC sampling, pickup fro
 * Based on our calculations, the transition band occurs at the max input frequency and the Nyquist (per channel) rate: $$f_{band} = f_{N \space Channel} - f_{max}
   = 4 kS/s - 2 kS/s = 2 kS/s$$ for the bandwith range of filtering
 * Thus all the frequencies from 0-2 kHz will pass, 2-4 kHz are attenuated, and anything above the Nyquist frequency are rejected
-
-
-
-
+* Thus, with oversampling, low-pass filter filtering we exceed requirements (could also implement digital decimation after filtering)
 
 ### 2. DMA-Based Data Acquisition
+Recall design constraints for ADC:
+1. ADC resolution: 12 bits
 
+Note that the faster the ADC samples, the fewer the number of bit out. N-bit ADC can quantize the input signal to $$2^N$$ levels.   
+We also note that the digital output range is approximately $$[-2^{N-1}, 2^{N-1} \space volts]$$.
+   
 <Show a UML messaging diagram that illustrates the interaction between the ADC, DMA peripheral, and CPU>
 The interaction between the ADC, DMA peripheral, and CPU is illustrated in the messaging diagram of Figure 2.
 
