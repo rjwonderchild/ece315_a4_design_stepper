@@ -68,6 +68,13 @@ the ADC is set for muliple inputs and can utilize round-robin sampling. From the
 * To find the sample rate per channel, we use $$f_{per \space channel} = \frac{f_s}{M}$$ where M is the number of channels.
 * Four channels to sample: $$f_{per \space channel} = \frac{6 kS/s}{4} = 1.5 kS/s$$.
 * This is below the input range of 0-2 kHz for sampling, thus, we need to re-evaluate our total sampling rate.
+* Set each channel to have 6 kS/s, thus: $$f_s = f_{per \space channel} \cdot M = 6 kS/s \cdot 4 = 24 kS/s.
+* The new Nyquist Frequency is $$f_N = \frac{f_s}{2} = \frac{24 kS/s}{2} = 12 kS/s$$.
+* We now exceed the Nyquist frequency, which helps minimize the aliasing.
+* Note that if we had kept the original sample frequencies, the Nyquist frequency is severly lowered, and thus the signal fidelity would be decreased. Fidelity
+  is affected by the resolution (bit depth), time (sampling rate, jitter), noise (thermal), etc. Thus, by increaseing the sample rate for the per channel, the
+  fidelity increases, and minimizes distortion.
+
 
 
 
