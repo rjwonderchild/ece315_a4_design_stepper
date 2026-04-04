@@ -55,8 +55,15 @@ Recall design constraints for ADC and sampling:
 With these constraints in mind, we first find the minimum sampling rate. Here, we apply Nyquist-Shannon Sampling Theorem, which states bandlimited frequencys with
 $f_{max}$ can be reconstructed perfectly where: $$f_s \geq 2 f_{max}$$, and need anti-aliasing filters to ensure $$\frac{f_s}{2} \geq f_{max}$$. Apply rule-of-thumb: sample **2-10x** $f_{max}$ for margin & filter roll-off.
 
+* Thus, we find that $f_{max}$ is the max analogue input signal of 2 kHz
+* A minimum rate (Nyquist) would be 4 kS/s (4 kHz), however we want to give ourselves some headroom and aliasing budget
+* Multiply this value by 3, and we get the sampling rate of: $f_s = 6 kHz = 6 kS/s
+* The new Nyquist Frequency is $$f_N \geq \frac{f_s}{2}$$, thus $$f_N = \frac{6 kS/s}{2} = 3 kS/s = 3 kHz
+* Rate was choosen to help with design overhead (margin), reduce aliasing folding, use of anti-alias filter, keep system cost low
 
-The Nyquist Frequency is $$f_N \geq \frac{f_s}{2}$$, where input frequencies that exceed the Nyquist frequency will undergo Aliasing.
+
+
+
 
 ### 2. DMA-Based Data Acquisition
 
