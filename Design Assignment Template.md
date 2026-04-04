@@ -47,6 +47,14 @@ Each of the main design tasks related to the architecture are summarized in the 
 ## Design Tasks
 
 ### 1. ADC and Sampling Design
+Recall design constraints for ADC and sampling:
+1. Analogue input bandwidth: 0-2 kHz
+2. ADC resolution: 12 bits
+3. Maximum allowed event-to-response latency: 2ms
+
+With these constraints in mind, we first find the minimum sampling rate. Here, we apply Nyquist-Shannon Sampling Theorem, which states bandlimited frequencys with
+f_max can be reconstructed perfectly where: f_s >= f_max, and need anti-aliasing filters to ensure (f_s/2) >= f_max. Apply rule-of-thumb: sample 2-10 times f_max 
+for margin & filter roll-off.
 
 ### 2. DMA-Based Data Acquisition
 
