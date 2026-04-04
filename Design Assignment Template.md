@@ -68,13 +68,20 @@ the ADC is set for muliple inputs and can utilize round-robin sampling. From the
 * To find the sample rate per channel, we use $$f_{per \space channel} = \frac{f_s}{M}$$ where M is the number of channels.
 * Four channels to sample: $$f_{per \space channel} = \frac{6 kS/s}{4} = 1.5 kS/s$$.
 * This is below the input range of 0-2 kHz for sampling, thus, we need to re-evaluate our total sampling rate.
-* Set each channel to have 6 kS/s, thus: $$f_s = f_{per \space channel} \cdot M = 6 kS/s \cdot 4 = 24 kS/s.
-* The new Nyquist Frequency is $$f_N = \frac{f_s}{2} = \frac{24 kS/s}{2} = 12 kS/s$$.
+* Set each channel to have sampling rate of 8 kS/s, thus: $$f_s = f_{per \space channel} \cdot M = 8 kS/s \cdot 4 = 32 kS/s.
+* The new total Nyquist Frequency is $$f_N = \frac{f_s}{2} = \frac{24 kS/s}{2} = 16 kS/s$$.
 * We now exceed the Nyquist frequency, which helps minimize the aliasing.
 * Note that if we had kept the original sample frequencies, the Nyquist frequency is severly lowered, and thus the signal fidelity would be decreased. Fidelity
   is affected by the resolution (bit depth), time (sampling rate, jitter), noise (thermal), etc. Thus, by increaseing the sample rate for the per channel, the
   fidelity increases, and minimizes distortion.
 
+Anti-aliasing filters are almost always recommended for ADC sampling, pickup from stray signals (powerline frequency or even local radio stations!) may contain such frequencies higher than the Nyquist Frequency, and thus these frequencies may alias into the appropriate frequency range.
+
+* We use filters to anti-alias sampling for ADCs, in our design we wouldnt necessarily need one, but we will implement one for good practice
+* Add a low-pass filter (passes low frequencies, but attenuates the high frequencies) before the sampler and ADC
+* Based on our calculations, the transition band occurs at the max input frequency and the Nyquist (per channel) rate: $$f_{band} = f_{N \space Channel} - f_{max}
+  = 4 kS/s - 2 kS/s = 2 kS/s$$ for the bandwith range of filtering
+* Thus all the frequencies from 0-2 kHz will pass, 2-4 kHz are attenuated, and anything above the Nyquist frequency are rejected
 
 
 
