@@ -311,13 +311,13 @@ continous and even spacing, the pulses will arrive to the driver sporadically. T
 
 ### 5. Feasibility and CPU Budget Analysis  
 Assuming:  
-* Each interrupt costs $8\mus$
-* Each block-processing routine costs $120\mus$
-* Motor control update overhead is $40\mus$ per update
+* Each interrupt costs $8\mu s$
+* Each block-processing routine costs $120\mu s$
+* Motor control update overhead is $40\mu s$ per update
 * Choosen design uses one control update per sample block
 
 First, we begin with processing how long a single sample takes, then the time for 16 samples (one block, which is known to be 2ms).  
-$$T_s=\frac{1 \space sample}{8000 kS/s}=125\mus$$
+$$T_s=\frac{1 \space sample}{8000 kS/s}=125\mu s$$
 
 ### 6. System-Level Design Tradeoffs
 
