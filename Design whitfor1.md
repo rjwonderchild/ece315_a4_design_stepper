@@ -5,30 +5,30 @@ Riley Whitford (whitfor1)
 
 ## Introduction
 This is a single design problem, where we are creating an ADC sampling system that reads the analogue voltage from an error position sensor on some arbitrary 
-platform. The system utilizes an RP2040 embedded system that needs to perform real-time monitoring and control of a stepper motor-driven system, in which we acquire analogue sensor data through and ADC, transfer the data to memory by DMA, detect threshold conditions, control the motor through GPIOs, while maintaing a reasonable CPU load. The system had a few key constraints that needed to be met with the aforementioned objectives, namely using a 0 - 2 kHz signal, 12 bit resolution, a latency response time of 2ms, and use of either a A4988 or L298N driver for the stepper motor. A good approach in the design of the system was to breakdown the design tasks into 6 steps:  
+platform. The system utilizes an RP2040 embedded system that needs to perform real-time monitoring and control of a stepper motor-driven system, in which we acquire analogue sensor data through and ADC, transfer the data to memory by DMA, detect threshold conditions, control the motor through GPIOs, while maintaining a reasonable CPU load. The system had a few key constraints that needed to be met with the aforementioned objectives, namely using a 0 - 2 kHz signal, 12 bit resolution, a latency response time of 2ms, and use of either a A4988 or L298N driver for the stepper motor. A good approach in the design of the system was to breakdown the design tasks into 6 steps:  
 
 1. ADC and Sampling Design  
-2. DMA-Based Data Acquistion  
+2. DMA-Based Data Acquisition  
 3. Interrupt and Processing Strategy  
 4. Motor Control
 5. CPU budget analysis
 6. Analysis of System-Level design tradeoffs
 
-One needed to approach this problem with familiarity of the compomenents, such as reading the manual (RTM), investigating online forums and discussions from 
+One needed to approach this problem with familiarity of the components, such as reading the manual (RTM), investigating online forums and discussions from 
 other designers and their experimental observations, and utilizing new technology such as AI to assist in; speed of analysis, critical viewpoints & situations, 
 evaluating the limitations of different hardware in real-time, and theoretical extraction from various online sources.  
 
 ## System Overview
-In this excersise, we are designing a single, simple embedded system that takes a voltage analogue signal from an error measurement sensor, that is constantly 
+In this exercise, we are designing a single, simple embedded system that takes a voltage analogue signal from an error measurement sensor, that is constantly 
 sampling the rotation (movement) of a motion platform. From this analogue signal (a single input control signal), it is then passed to a motion controller, where
-it first goes through a low-pass filter (to assit in aliasing), in which the sampled data is then sorted and blocked by a DMA & ADC. The MCU, which in this
-embedded system is the RP2040, will interpert this data by using various algorithims, threshold parameters, and user configuration to adjust the real-time
-control of the Motion Platform. This is achieved by creating a psuedo PWM through the use of software and the GPIO pins on the RP2040, where the pulse delay,
-steps, and direction signals are sent to the motor driver (A4988) inside the Motion Platoform, which then drivers the stepper motor. We can see a system
+it first goes through a low-pass filter (to assist in aliasing), in which the sampled data is then sorted and blocked by a DMA & ADC. The MCU, which in this
+embedded system is the RP2040, will interpret this data by using various algorithms, threshold parameters, and user configuration to adjust the real-time
+control of the Motion Platform. This is achieved by creating a pseudo PWM through the use of software and the GPIO pins on the RP2040, where the pulse delay,
+steps, and direction signals are sent to the motor driver (A4988) inside the Motion Platform, which then drivers the stepper motor. We can see a system
 architecture diagram in Figure 1.  
 
 ![An example system deployment diagram using UML2](images/Block_Diagram.png)  
-**Figure 1** Block diagram for the embedded ADC motion controller. The main boxes encompass the three major componenets; Analogue Sensor Module, Motion Platform, and the Motion Controller. Inside the main devices reside the specific components that are required to operate the device and interpert data between them. The purple dashed lines represent data transfer, while the solid light purple represents a physical signal connection. The *leafs* connected to each main component are parameters, tasks, or singals asscociated with each component.  
+**Figure 1** Block diagram for the embedded ADC motion controller. The main boxes encompass the three major components; Analogue Sensor Module, Motion Platform, and the Motion Controller. Inside the main devices reside the specific components that are required to operate the device and interpret data between them. The purple dashed lines represent data transfer, while the solid light purple represents a physical signal connection. The *leafs* connected to each main component are parameters, tasks, or signals asscociated with each component.  
 
 As mentioned in the introduction, the main function of the system is to control motor rotation direction based on a single input control signal. The name and 
 purpose of each of the nodes and components shown in Figure 1 are summarize in Table 1 below.
@@ -66,7 +66,7 @@ purpose of each of the nodes and components shown in Figure 1 are summarize in T
     <tr>
       <td>MCU</td>
       <td>Both</td>
-      <td>The RP2040 is responsible for all the logic, threshold, and motor control decisions, as well as intializing all the various componenets</td>
+      <td>The RP2040 is responsible for all the logic, threshold, and motor control decisions, as well as intializing all the various components</td>
     </tr>
     <tr>
       <td>GPIO</td>
@@ -209,7 +209,7 @@ Advantages are:
 The interaction between the ADC, DMA peripheral, and CPU is illustrated in the messaging diagram of Figure 2.
 
 ![UML Messaging diagram for system](images/UML_Messaging.png)  
-**Figure 2** Here, we see a UML Messaging diagram for the embedded system. There are 6 main stages; ADC, DMA, CPU, Program Software, SRAM and Motor. Extending downards from these componenets are the *lifelines*, that each have actors and *interaction frames* that live on them. The *messages* are communications paths between the lifelines represented by solid or dashed lines with filled and non-filled arrowheads; filled heads are synchronous messages, while non-filled are asynchronous.  
+**Figure 2** Here, we see a UML Messaging diagram for the embedded system. There are 6 main stages; ADC, DMA, CPU, Program Software, SRAM and Motor. Extending downards from these components are the *lifelines*, that each have actors and *interaction frames* that live on them. The *messages* are communications paths between the lifelines represented by solid or dashed lines with filled and non-filled arrowheads; filled heads are synchronous messages, while non-filled are asynchronous.  
 
 ### 3. Interrupt and Processing Strategy
 Recall some critical constraints for the design:
@@ -422,7 +422,7 @@ we would start to expotentially increase the CPU load, thus increasing power con
 section, to keep the CPU load low, we can use different memory-mapped perhipheral processes such as using a DMA rather than polling, tighten interrupts to be 
 short, and use larger sample blocks. But with these lowered CPU costs inadverntently increases the latecny of the system, and simulatenously increases the 
 complexity of it. A simple implementation would be to stick to a polling system or end of block interrupt (at the cost of increased CPU activity), use software to
-implement control of systems, rather than rely on specialized hardware componenents (DMA, FPU, etc.).  
+implement control of systems, rather than rely on specialized hardware components (DMA, FPU, etc.).  
 
 By the current design implementation, we utilize a DMA to lower the CPU load, use a two buffer interrupt system to ensure data integrity/sampling to improve the
 latency, a moderately fast sampling rate with moderate size blocking to strike a balance between CPU load and response time. We implemented this at the cost of 
