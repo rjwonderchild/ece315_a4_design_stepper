@@ -122,7 +122,7 @@ thumb: sample **2-10x** $f_{max}$ for margin & filter roll-off.
 
 **Part 1.2**  
 We are then told the ADC samples 4 analogue channels in roun-robin mode, need to determine an effective per-channel sampling rate. We note that for the RP2040,
-the ADC is set for muliple inputs and can utilize round-robin sampling. From the documentaiton, the RP2040 has only one ADC FIFO, so the sample from each source
+the ADC is set for muliple inputs and can utilize round-robin sampling. From the documentation, the RP2040 has only one ADC FIFO, so the sample from each source
 (channel) are placed into the FIFO in an interleaved fashion, which must later be de-interleaved.
 
 * To find the sample rate per channel, we use $$f_{per \space channel} = \frac{f_s}{M}$$ where M is the number of channels.
