@@ -239,8 +239,14 @@ Faults that could occur with no DPS:
 * False triggers/flags set by the various peripherals
 * Violation of response time constraints
 
-
-
+One solution to some processing could be *Adaptive thresholding,* a process used to adjust the threshold level dynamically to the current signal level in order
+to seperate the signal from the background noise. Another could be *Dual Hysteresis thresholding* where two thresholds are used, similar to a chip select (a low 
+and high). We want to ensure that this processing has a *very* minimized affect on the latency of the system, to keep within the 2ms reponse limit.
+Small processing would result in:  
+* Motor jitter/chatter being significantly reduced
+* Motor stability increased
+* Smoother operation
+* Extended life of components due to reduction of switching in components
 
 ### 4. Motor Control
 
