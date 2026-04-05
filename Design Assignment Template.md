@@ -20,14 +20,21 @@ evaluating the limitations of different hardware in real-time, and theoretical e
 
 ## System Overview
 <Write a brief overview of the system architecture and include a block diagram. An example is provide below. Make sure to identify and describe each node and component on the diagram. A table may be used for this>
-A high-level deployment diagram for the envisioned system is shown in Figure 1.
+In this excersise, we are designing a single, simple embedded system that takes a voltage analogue signal from an error measurement sensor, that is constantly 
+sampling the rotation (movement) of a motion platform. From this analogue signal (a single input control signal), it is then passed to a motion controller, where
+it first goes through a low-pass filter (to assit in aliasing), in which the sampled data is then sorted and blocked by a DMA & ADC. The MCU, which in this
+embedded system is the RP2040, will interpert this data by using various algorithims, threshold parameters, and user configuration to adjust the real-time
+control of the Motion Platform. This is achieved by creating a psuedo PWM through the use of software and the GPIO pins on the RP2040, where the pulse delay,
+steps, and direction signals are sent to the motor driver (A4988) inside the Motion Platoform, which then drivers the stepper motor. We can see a system
+architecture diagram in Figure 1.  
 
-![An example system deployment diagram using UML2](images/Block_Diagram.png)
-Figure 1 Block diagram for the embedded ADC motion controller. The main boxes encompass the three major componenets; Analogue Sensor Module, Motion Platform, and the Motion Controller. Inside the main devices reside the specific components that are required to operate the device and interpert data between them. The purple dashed lines represent data transfer, while the solid light purple represents a physical signal connection.  
+![An example system deployment diagram using UML2](images/Block_Diagram.png)  
+**Figure 1** Block diagram for the embedded ADC motion controller. The main boxes encompass the three major componenets; Analogue Sensor Module, Motion Platform, and the Motion Controller. Inside the main devices reside the specific components that are required to operate the device and interpert data between them. The purple dashed lines represent data transfer, while the solid light purple represents a physical signal connection.  
 
-As mentioned in the introduction, the main function of the system is to control motor rotation direction based on a single input control signal. The name and purpose of each of the nodes and components shown in Figure 1 are summarize in Table 1 below.
+As mentioned in the introduction, the main function of the system is to control motor rotation direction based on a single input control signal. The name and 
+purpose of each of the nodes and components shown in Figure 1 are summarize in Table 1 below.
 
-Table 1 Description of the main system nodes and components
+**Table 1** Description of the main system nodes and components
 <table>
   <thead>
     <tr>
