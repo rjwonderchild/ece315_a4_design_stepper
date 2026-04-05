@@ -44,17 +44,57 @@ purpose of each of the nodes and components shown in Figure 1 are summarize in T
   </thead>
   <tbody>
     <tr>
-      <td>Row 1, Cell 1</td>
+      <td>Motion Controller</td>
       <td>Row 1, Cell 2</td>
       <td>Row 1, Cell 3</td>
     </tr>
     <tr>
-      <td>Row 2, Cell 1</td>
+      <td>Low-Pass Aliasing Filter</td>
       <td>Row 2, Cell 2</td>
       <td>Row 2, Cell 3</td>
     </tr>
     <tr>
-      <td>Row 3, Cell 1</td>
+      <td>ADC</td>
+      <td>Row 3, Cell 2</td>
+      <td>Row 3, Cell 3</td>
+    </tr>
+    <tr>
+      <td>DMA</td>
+      <td>Row 3, Cell 2</td>
+      <td>Row 3, Cell 3</td>
+    </tr>
+    <tr>
+      <td>MCU</td>
+      <td>Row 3, Cell 2</td>
+      <td>Row 3, Cell 3</td>
+    </tr>
+    <tr>
+      <td>GPIO</td>
+      <td>Row 3, Cell 2</td>
+      <td>Row 3, Cell 3</td>
+    </tr>
+    <tr>
+      <td>Motion Platform</td>
+      <td>Row 3, Cell 2</td>
+      <td>Row 3, Cell 3</td>
+    </tr>
+    <tr>
+      <td>Motion Platform</td>
+      <td>Row 3, Cell 2</td>
+      <td>Row 3, Cell 3</td>
+    </tr>
+    <tr>
+      <td>Motion Platform</td>
+      <td>Row 3, Cell 2</td>
+      <td>Row 3, Cell 3</td>
+    </tr>
+    <tr>
+      <td>Motion Platform</td>
+      <td>Row 3, Cell 2</td>
+      <td>Row 3, Cell 3</td>
+    </tr>
+    <tr>
+      <td>Motion Platform</td>
       <td>Row 3, Cell 2</td>
       <td>Row 3, Cell 3</td>
     </tr>
