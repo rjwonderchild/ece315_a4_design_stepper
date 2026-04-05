@@ -156,6 +156,12 @@ The interaction between the ADC, DMA peripheral, and CPU is illustrated in the m
 Figure 2 An example messaging diagram
 
 ### 3. Interrupt and Processing Strategy
+Recall some critical constraints for the design:
+1. Maximum allowed event-to-reponse latency: 2ms
+2. CPU must remain at 70% availability for unrelated application tasks
+
+**Part 3.1**  
+
 
 ### 4. Motor Control
 
