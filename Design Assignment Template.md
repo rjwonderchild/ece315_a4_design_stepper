@@ -352,7 +352,7 @@ or lower the sampling rate at the cost of fidelity.
 The design of this system is a very *basic close-loop control system,* as we are sampling a sensor that produces an analogue voltage proportional to the position 
 error, and thus sending a command to the motor to respond. In embedded system design, it is important to determine whether an *open-loop or closed-loop control 
 system* is more appropriate depending on the application. An open loop provides:
-* Design and implementaiton remain simply and easy
+* Design and implementation remain simply and easy
 * Low cost and minimal maintenance
 * Fast system operation
 * Suitable where high accuracy is not required
