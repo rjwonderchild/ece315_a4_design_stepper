@@ -144,6 +144,7 @@ Advantages are:
 * True continous sampling
 * CPU and DMA work in parallel
 * Overrun and data loss is minimized (as sampling would stop for brief periods in a cycle)
+* Keeps CPU load low in regards to data transfer
 
 **Part 2.4**  
 
