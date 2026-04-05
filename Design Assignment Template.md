@@ -248,7 +248,48 @@ Small processing would result in:
 * Smoother operation
 * Extended life of components due to reduction of switching in components
 
-### 4. Motor Control
+### 4. Motor Control  
+For this design, we choose the A4988. This is because:
+* Max current phase of 2A
+* Large Voltage operation range from 8-35V
+* Minimum Logic Voltage of 3.3V
+* Can perform micro-step resolutions (down to 1/16)
+* Requires only two pins for logic (STEP, DIR)
+* Current limiting
+* Coils controlled automatically by driver
+
+**Part 4.1** 
+The two pins required for control signals on the driver are:
+* STEP - A pulse on this pin would advance the motor by one step (depending on configured step size)
+* DIR - Would most likely be a signal set low or set high to enable direction of roration for the step(s)
+Optionally, one can also use:
+* ENABLE - Which when pulled high or low would determine driver outputs
+* MS1/2/3 - Sets the microstepping level for the driver
+* RESET/SLEEP - Usually active low and pulled high internally
+
+The two logic pins would be connected to GPIO pins on the RP2040, Enable also to a GPIO pin. The MS1/2 would be 'jumped' high, while MS3 would have no jumper 
+inserted to remain low; also to be set through GPIO on the RP2040 -- this would result in 1/8 microstepping.  
+
+RESET/SLEEP are usually jumped together.  
+
+**Part 4.2**
+For this current design, we will opt with GPIO bit control (mostly because this is what I saw in lecture!) which also utilizes memory-mapped peripheral access 
+(the GPIO pins being set on the API).  
+We would first set the required GPIO pins on the RP2040 (5 total here for DIR, STEP, MS1/2/3), to be all digital outputs, and thus we would then set all pins to 
+*OUT*. Logic would be intialized to zero. We would utilize masking for MS1, MS2, and MS3 through definitions, and concurrently create two structs, one for 
+microstepping (sets the masks for type of step from 1/16 to full step), and another for the direction. First, the microsteps to be driven would be set through
+the struct masking, and calculating the appropriate delay between the stepping pulses, creating the microstepping configuration signals. Next, the direction 
+signal is generated, where depending on the threshold level and the command sent, would determine the direction of the steps, set before the *'pulses'* are sent
+from the microstep bitmasking function. Finally, a step delay would need to be created based on the desired RPM, and account for the duration of stepping pulse 
+to create the perceived rotation (essentially, this controls the speed). This cumlulates into the STEP signal which is driven high based on the direction and 
+delay functions that lie within, turning the pin 'on' and 'off' to simulate a psuedo PWM.  
+
+**Part 4.3**
+We will utilize the formula:  
+$$Pulse \space Frequency \space = steps \space per \space revolution \space \times \space revolutions \space per \space second
+
+
+
 
 ### 5. Feasibility and CPU Budget Analysis
 
@@ -271,4 +312,10 @@ ECE315 Lecture Notes
 [7] https://forums.raspberrypi.com/viewtopic.php?p=1861895#p1861895   
 [8] https://embedded.fm/blog/2017/3/21/ping-pong-buffers   
 [9] https://electronics.stackexchange.com/questions/469121/why-should-interrupts-be-short-in-a-well-configured-system   
-[10] https://medium.com/trading-data-analysis/start-setting-thresholds-like-a-pro-c58e611fb0cb
+[10] https://medium.com/trading-data-analysis/start-setting-thresholds-like-a-pro-c58e611fb0cb  
+[11] https://www.handsontec.com/dataspecs/module/A4988.pdf  
+[12]  https://www.handsontec.com/dataspecs/L298N%20Motor%20Driver.pdf  
+[13] https://www.reddit.com/r/arduino/comments/jn6zeg/how_to_chose_the_right_motor_driver/   
+[14] https://forum.pololu.com/t/which-to-use-l298n-h-bridge-or-the-a4988-stepper-motor-driver-carrier/9868  
+
+
