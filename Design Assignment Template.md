@@ -1,10 +1,9 @@
-#ECE 315 – Design Assignment: Real-Time Data Acquisition 
+# ECE 315 – Design Assignment: Real-Time Data Acquisition 
 
 ## Author
 Riley Whitford (whitfor1)
 
 ## Introduction
-<summarize the problem, objectives, and approach to this assignment>
 This is a single design problem, where we are creating an ADC sampling system that reads the analogue voltage from an error position sensor on some arbitrary 
 platform. The system utilizes an RP2040 embedded system that needs to perform real-time monitoring and control of a stepper motor-driven system, in which we acquire analogue sensor data through and ADC, transfer the data to memory by DMA, detect threshold conditions, control the motor through GPIOs, while maintaing a reasonable CPU load. The system had a few key constraints that needed to be met with the aforementioned objectives, namely using a 0 - 2 kHz signal, 12 bit resolution, a latency response time of 2ms, and use of either a A4988 or L298N driver for the stepper motor. A good approach in the design of the system was to breakdown the design tasks into 6 steps:  
 1. ADC and Sampling Design  
