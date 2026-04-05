@@ -109,18 +109,41 @@ and then the DMA moves the data from the FIFO to a RAM buffer, and when a block 
 * For the block size, we consider the per-channel sample rate and allowed latency: $$T_{block} = \frac{N}{f_s}$$ which equates too: $$\frac{N}{8 kS/s} \leq 2 ms$$
   $$N \leq 16$$. Thus, we will set N (buffer size(s)) to be 16 samples
 * The ADC is continously samping, and thus the DMA should transfer after the DMA channels are configured, ADC FIFO is enabled, and DMA controls registers are
-* properly configured. For our design, we set the EN to 1 which allows the DMA to respond to triggering events, while also setting TREQ_SEL to handle pacing of
-* the DMA with the CPU (Handled by DREQ_ADC = 36). Transfer will occur when the block is 'filled.' A transfer is signalled when BUSY (Bit 24) is 1 and
-* TRANS_COUNT > 0.
+ properly configured. For our design, we set the EN to 1 which allows the DMA to respond to triggering events, while also setting TREQ_SEL to handle pacing of
+ the DMA with the CPU (Handled by DREQ_ADC = 36). Transfer will occur when the block is 'filled.' A transfer is signalled when BUSY (Bit 24) is 1 and
+ TRANS_COUNT > 0.
 * A transfer will be completed when the signal of the BUSY bit is set to 0, and TRANS_COUNT is set to 0. We can raised and IRQ (set IRQ_QUIET to 0) to let CPU
 know that the sample block is ready.
   
 **Part 2.2**
 DMAs are used to transfer large amounts of data without CPU involvement. The RP2040 specifically allows for transfers of Memory-to-Peripheral, Memory-to-Memory,
 Peripheral-to-Peripheral. In this particular design, the CPU only needs to intialize the DMA once at the beginning, where the DMA then handles all the sampling 
-data transfer from the FIFO to the SRAM. When the data is ready to be processed, an interrupt is sent to the CPU. This is preferable, as if t
+data transfer from the FIFO to the SRAM. When the data is ready to be processed, an interrupt is sent to the CPU. This is preferable, as if the CPU had to 
+constantly poll the ouput register of the ADC, if would need to store each sample in RAM itself, keep up with the sample rate, all while performaing various
+othe CPU tasks. Thus the benefits of DMA are:
+
+* Samples moved automatically
+* Allow for lower latency
+* Lower power consumption (allows CPU to *sleep*)
+* Less data corruption
+* CPU Overhead is reduced (time is freed for other logic)
+* Increased CPU efficiency
+* Faster Data transfers
+* Improved system performance
 
 **Part 2.3**
+As noted above, we have choosen our sample block size to be $$N = 16$$ samples. To further reduce overhead, and ensure we meet time constraints while constantly 
+sampling, we will utilize a dual buffer design. Dual buffer, also known as *"PING PONG Buffers,"* which is a lot like a 2-element circular buffer. The process of
+sampling then becomes: Processor receives DataReady interrupt from DMA, DMA sends a read to ADC for enough bytes to transfer one sample; where both these 
+operations occur until 16 samples are filled, DMA transfer interrupt fires to CPU to signal algorithim to run.
+
+The Double Buffer would require the use of SRAM1. In laymens terms, as the DMA fills one buffer (SRAM1), the CPU would process data in SRAM0, thus little to no
+stopping occurs in processing. Setting *RING_SIZE* and *RING_SEL* in intialization of DMA from CPU helps achieve this.
+
+Advantages are:
+* True continous sampling
+* CPU and DMA work in parallel
+* Overrun and data loss is minimized (as sampling would stop for brief periods in a cycle)
 
 **Part 2.4**
 
@@ -153,5 +176,5 @@ ECE315 Lecture Notes
 [4] https://forums.ni.com/t5/Multifunction-DAQ/what-do-you-mean-by-MS-s-or-KS-s-as-unit-of-frequency-I-m-used/td-p/925278   
 [5] https://forums.ni.com/t5/Multifunction-DAQ/What-is-the-unit-kS-s-stand-for/m-p/4258344#M10295   
 [6] https://pip-assets.raspberrypi.com/categories/814-rp2040/documents/RP-008371-DS-1-rp2040-datasheet.pdf?disposition=inline   
-[7] https://forums.raspberrypi.com/viewtopic.php?p=1861895#p1861895
-
+[7] https://forums.raspberrypi.com/viewtopic.php?p=1861895#p1861895   
+[8] https://embedded.fm/blog/2017/3/21/ping-pong-buffers   
