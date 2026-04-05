@@ -6,6 +6,7 @@ Riley Whitford (whitfor1)
 ## Introduction
 This is a single design problem, where we are creating an ADC sampling system that reads the analogue voltage from an error position sensor on some arbitrary 
 platform. The system utilizes an RP2040 embedded system that needs to perform real-time monitoring and control of a stepper motor-driven system, in which we acquire analogue sensor data through and ADC, transfer the data to memory by DMA, detect threshold conditions, control the motor through GPIOs, while maintaing a reasonable CPU load. The system had a few key constraints that needed to be met with the aforementioned objectives, namely using a 0 - 2 kHz signal, 12 bit resolution, a latency response time of 2ms, and use of either a A4988 or L298N driver for the stepper motor. A good approach in the design of the system was to breakdown the design tasks into 6 steps:  
+
 1. ADC and Sampling Design  
 2. DMA-Based Data Acquistion  
 3. Interrupt and Processing Strategy  
@@ -393,7 +394,25 @@ increased complexity, that was slightly save with the choice of the direct drive
 ## AI Usage Declaration
 
 Yes, AI was used to help complete this assignment. I found that because this assignment was tying so many topics together that we were exposed to and learned 
-throughout the course, that I found with using AI was immensely helpful in locating the correct sources within the note packages, but also for sourcing additional resources online as seen in the resources section. I would communicate back and forth with AI, usually by suggesting a solution I had, and cross referencing with it if I had missed any glaring parameters. For example, in the memory-mapped peripheral section,
+throughout the course, that I found with using AI was immensely helpful in locating the correct sources within the note packages, but also for sourcing 
+additional resources online as seen in the resources section. I would communicate back and forth with AI, usually by suggesting a solution I had, and cross 
+referencing with it if I had missed any glaring parameters. For example, in the memory-mapped peripheral section and how this relates to a DMA, such as the one 
+on the RP2040, the AI was quick to explain all the relevant memory mapped registers, and succinctly(!) put them into a nice organized list, explaining what they 
+did, and how I could utilize these registers in the sampling data worflow throughout the system. Another example was during the CPU budget analysis. I initially
+thought that I needed to take into account *all possible* IRQs, double the block calculation (since this design I opted for dual buffer), and account for other 
+constraints in the budget calculation; I used the AI to double check this calculation methodology, where it explained that I was utilizing way too many 
+variables, and that this needed to be more of a straight-forward estimation, where we are really only taking into consideration one time cost initialization per 
+event, rather than a complete time breakdown. As always, one needs to be careful when trusting what the AI will feed back to a prompter; thus I was usually fact 
+checking its outputs by requiring it to cite sources, primarily from the notes of the course, the manual documents for the stepper drivers & RP2040, and any 
+online source it had to cross reference. This had a two-fold benefit;  
+1. I was learning more about computer interfacing, as it usually led me to more technical forums of other learners seeking advice from more knowledgeble
+individuals in the field
+3. If I needed a deeper explaining on a topic, such as aliasing that we saw here, the AI was able to break it down in more ELI5 terms, while also providing
+small, but power examples that helped cement the logic behind these topics, giving me more confidence to approach them later in my career
+In summary, while at the end of the day, I ultimately made the final decisions in the design, the AI was great in giving me a very quick and concise breakdown of
+each option in all the design stages, listing the pros/cons, and potential conflicts of each choice down the road. While some of the information was inaccurate,
+this was fairly easy to pick, should one properly be vetting the information it had given, or by understanding the material we are studying, one would
+intuitively know if the design decision was appropriate for the subject or not.
 
 ## Resources
 
