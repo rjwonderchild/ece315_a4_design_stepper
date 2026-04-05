@@ -88,9 +88,10 @@ Anti-aliasing filters are almost always recommended for ADC sampling, pickup fro
 ### 2. DMA-Based Data Acquisition
 Recall design constraints for ADC:
 1. ADC resolution: 12 bits
-2. Note that the faster the ADC samples, the fewer the number of bit out. N-bit ADC can quantize the input signal to $$2^N$$ levels.   
+2. Note that the faster the ADC samples, the fewer the number of bit out. N-bit ADC can quantize the input signal to $$2^N$$ levels.
+3. Even-to-response latency: 2 ms
 We also note that the digital output range is approximately $$[-2^{N-1}, 2^{N-1} \space volts]$$.
-3. The RP2040 DMA features are: 12 independent DMA channels, separate read/write bus masters, transfer 8/16/32-bit words with one read+write per cycle, supports
+4. The RP2040 DMA features are: 12 independent DMA channels, separate read/write bus masters, transfer 8/16/32-bit words with one read+write per cycle, supports
    paced (TREQ), and 100s MB/s throughput.
 
 **Part 2.1**
@@ -100,8 +101,15 @@ and then the DMA moves the data from the FIFO to a RAM buffer, and when a block 
 * The source for the DMA is the ADC FIFO register. From the datasheet the ADC_BASE is at *0x4004C00* with the ADC_FIFO at *0x4004C00C which is the source address
 * When sending the data, the DMA will send this to a RAM buffer (array inside the RAM or the *block*), in this case we will use SRAM0 which will be the destination of the
   data at address *0x21000000*
-
+* The transfer sizes that the RP2040 can handle are 8/16/32-bit transfers. The ADC samples at a resolution of 12-bits, thus we set the transfer sizes to 16-bits
+  which allows for headroom. Thus we are utilizing *half-word* transfers
+* For the block size, we consider the per-channel sample rate and allowed latency: $$T_{block} = \frac{N}{f_s}$$ which equates too: $$\frac{N}{8 kS/s} \lte 2 ms$$
+  $$N \lte 16$$. Thus, we will set N (buffer size(s)) to be 16 samples
+* The ADC is continously samping, and thus the DMA should transfer after the DMA channels are configured, ADC FIFO is enabled, and DMA controls registers are properly configured. For our design, we set the EN to 1 which allows the DMA to respond to triggering events, while also setting TREQ_SEL to handle pacing of the DMA with the CPU (Handled by DREQ_ADC = 36). Transfer will occur when the block is 'filled.' A transfer is signalled when BUSY (Bit 24) is 1 and TRANS_COUNT > 0.
+* A transfer will be completed when the signal of the BUSY bit is set to 0, and TRANS_COUNT is set to 0. We can raised and IRQ (set IRQ_QUIET to 0) to let CPU know that the sample block is ready.
+  
 **Part 2.2**
+
 
 **Part 2.3**
 
@@ -136,4 +144,5 @@ ECE315 Lecture Notes
 [4] https://forums.ni.com/t5/Multifunction-DAQ/what-do-you-mean-by-MS-s-or-KS-s-as-unit-of-frequency-I-m-used/td-p/925278   
 [5] https://forums.ni.com/t5/Multifunction-DAQ/What-is-the-unit-kS-s-stand-for/m-p/4258344#M10295   
 [6] https://pip-assets.raspberrypi.com/categories/814-rp2040/documents/RP-008371-DS-1-rp2040-datasheet.pdf?disposition=inline   
+[7] https://forums.raspberrypi.com/viewtopic.php?p=1861895#p1861895
 
