@@ -293,14 +293,14 @@ $$Pulse \space Frequency \space = 400 Hz$$
 
 Thus the RP2040 would need to generate 400 step pulses per second.  
 
-**Part 4.4**
+**Part 4.4**  
 Since a full step now requires 8 microsteps, the number of microsteps required to complete a revolution with 200 steps is:  
 $$200 \space Steps \space per \space revolution \space  \times \space 8 \space microsteps \space = 1600 \space microsteps \space per \space revolution$$  
 Now, we need to rotate the shaft twice, as with full stepping:  
 $$Pulse \space Frequency \space = 1600 \space microsteps \space per \space revolution \space \times 2 \space revolutions \space per \space second \space = \space 3200 Hz$$  
 Thus, the RP2040 would need to pulse at 3200 Hz to have the same rotation speed as with full stepping.  
 
-**Part 4.5**
+**Part 4.5**  
 As discussed previously, jitter can be introduced multiple different ways; from noisy signals to bad coding practicing/implementations (such as ISRs taking too 
 long!). Delay in pulse generation would essentially be simulating timing jitter in this case. Should the pulses (or delays in our implemenation) not have a 
 continous and even spacing, the pulses will arrive to the driver sporadically. This will cause the motor to exhibit:
@@ -324,12 +324,12 @@ $$\frac{1}{2ms}=500 \space updates \space per \space second$$
 Calculate the assumed costs above per update:  
 $$Assumed \space cost \space = (8+120+40) \mu s \space = \space 168 \mu s$$  
 Calculate total CPU time per event:  
-$$500 \space events \space per \second \space \times \space 168 \mu s = 84000 \mu s$$  
+$$500 \space events \space per \space second \space \times \space 168 \mu s = 84000 \mu s$$  
 Which equates to 84ms. In one second (1000 ms), we have a usage of:  
 $$\frac{84ms}{1000ms}=0.084=8.4%$$  
 CPU that is available:  
 
-$$100%-8.4%=91.6%$$ available. Thus, the CPU remains well above the 70% required.  
+$$ 100%-8.4%=91.6% $$ available. Thus, the CPU remains well above the 70% required.  
 
 Should the CPU not make that requriement; one could increase the block size to reduce ISR frequency, improve software implementation for the misc routine costs,
 or lower the sampling rate at the cost of fidelity.
