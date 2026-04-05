@@ -328,6 +328,7 @@ $$500 \space events \space per \second \space \times \space 168 \mu s = 84000 \m
 Which equates to 84ms. In one second (1000 ms), we have a usage of:  
 $$\frac{84ms}{1000ms}=0.084=8.4%$$  
 CPU that is available:  
+
 $$100%-8.4%=91.6%$$ available. Thus, the CPU remains well above the 70% required.  
 
 Should the CPU not make that requriement; one could increase the block size to reduce ISR frequency, improve software implementation for the misc routine costs,
