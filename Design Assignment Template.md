@@ -317,7 +317,21 @@ Assuming:
 * Choosen design uses one control update per sample block
 
 First, we begin with processing how long a single sample takes, then the time for 16 samples (one block, which is known to be 2ms).  
-$$T_s=\frac{1 \space sample}{8000 kS/s}=125\mu s$$
+$$T_s=\frac{1 \space sample}{8000 kS/s}=125\mu s$$  
+$$T_N=T_s \cdot 16=2ms$$  
+And the total number of blocks processed per second:  
+$$\frac{1}{2ms}=500 \space updates \space per \space second$$
+Calculate the assumed costs above per update:  
+$$Assumed \space cost \space = (8+120+40) \mu s \space = \space 168 \mu s$$  
+Calculate total CPU time per event:  
+$$500 \space events \space per \second \space \times \space 168 \mu s = 84000 \mu s$$  
+Which equates to 84ms. In one second (1000 ms), we have a usage of:  
+$$\frac{84ms}{1000ms}=0.084=8.4%$$  
+CPU that is available:  
+$$100%-8.4%=91.6%$$ available. Thus, the CPU remains well above the 70% required.  
+
+Should the CPU not make that requriement; one could increase the block size to reduce ISR frequency, improve software implementation for the misc routine costs,
+or lower the sampling rate at the cost of fidelity.
 
 ### 6. System-Level Design Tradeoffs
 
