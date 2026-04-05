@@ -149,10 +149,10 @@ Advantages are:
 **Part 2.4**  
 
    
-<Show a UML messaging diagram that illustrates the interaction between the ADC, DMA peripheral, and CPU>
+<Show a UML messaging diagram that illustrates the interaction between the ADC, DMA peripheral, and CPU>  
 The interaction between the ADC, DMA peripheral, and CPU is illustrated in the messaging diagram of Figure 2.
 
-![An example messaging diagram](images/UML_Messaging_template.png)
+![An example messaging diagram](images/UML_Messaging_template.png)  
 Figure 2 An example messaging diagram
 
 ### 3. Interrupt and Processing Strategy
