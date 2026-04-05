@@ -206,11 +206,10 @@ Advantages are:
 * Keeps CPU load low in regards to data transfer
 
 **Part 2.4**  
-<Show a UML messaging diagram that illustrates the interaction between the ADC, DMA peripheral, and CPU>  
 The interaction between the ADC, DMA peripheral, and CPU is illustrated in the messaging diagram of Figure 2.
 
 ![UML Messaging diagram for system](images/UML_Messaging.png)  
-**Figure 2** Here, we see a UML Messaging diagram for the embedded system. There are 6 main stages; ADC, DMA, CPU, Program Software, SRAM and Motor. Extending downards from these componenets are the *lifelines*, that each have actors and *interaction frames* that live on them. The *messages* are communications paths between the lifelines represented by solid or dashed lines with filled and non-filled arrowheads; filled heads are synchronous messages, while non-filled are asynchronous.
+**Figure 2** Here, we see a UML Messaging diagram for the embedded system. There are 6 main stages; ADC, DMA, CPU, Program Software, SRAM and Motor. Extending downards from these componenets are the *lifelines*, that each have actors and *interaction frames* that live on them. The *messages* are communications paths between the lifelines represented by solid or dashed lines with filled and non-filled arrowheads; filled heads are synchronous messages, while non-filled are asynchronous.  
 
 ### 3. Interrupt and Processing Strategy
 Recall some critical constraints for the design:
