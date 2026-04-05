@@ -409,6 +409,7 @@ online source it had to cross reference. This had a two-fold benefit;
 individuals in the field
 3. If I needed a deeper explaining on a topic, such as aliasing that we saw here, the AI was able to break it down in more ELI5 terms, while also providing
 small, but power examples that helped cement the logic behind these topics, giving me more confidence to approach them later in my career
+
 In summary, while at the end of the day, I ultimately made the final decisions in the design, the AI was great in giving me a very quick and concise breakdown of
 each option in all the design stages, listing the pros/cons, and potential conflicts of each choice down the road. While some of the information was inaccurate,
 this was fairly easy to pick, should one properly be vetting the information it had given, or by understanding the material we are studying, one would
