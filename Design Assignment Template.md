@@ -197,7 +197,7 @@ Table 1.1 Comparison of CPU polling, ADC/DMA block interrupt, ADC/DMA buffer int
   </tbody>
 </table>
 
-**Part 3.2** 
+**Part 3.2**  
 For this system, as previously mentioned would be the ADC/DMA with half-buffer and full-buffer interrupts. This is essentially saying the 1 block (16 samples) is
 one half-buffer, while an additional makes a full buffer (total of 32 samples). The processing of the first interrupt happens at $$T_{block} = \frac{16 \space samples}{8 kS/s} = 2 ms$$ which aligns with the specified design constraint, while also giving continous sampling.  
 The DMA moves data from the ADC to SRAM without needing the CPU, only interrupting when data is ready to be processed, resulting in parallel operations between 
@@ -207,6 +207,39 @@ proper data processing. Finally, this solution emobdies the embedded system desi
 buffers), CPU and DMA work in parallel, no risk of stopping data acquistion while a block is processing by the CPU; results in the most accurate & logical decisions based on input from ADC.  
 
 **Part 3.3**
+It is imperative to keep ISRs short, that is, an ISR should take little time & execution time should have a *known worst case upper bound* keeping it 
+deterministic. ISRs should be doing time-critical or handling external events. They need to be short to handle these external asynchronous events, tight timing
+requirements need to be met, high-frequency events (such as the DMA sending fairly consistent sampling updates).
+In summary:
+* ISR's can not delay other interrupts
+* Could increase timing (causing missed data, jitter, etc.)
+* Reduce responsiveness of system
+* Soft/Hardlock system
+* Make embedded system much more undetermnistic
+
+The work done inside an ISR for our design should be:
+* To handle the DMA interrupts of block ready
+* Determine if the first block or second block is ready
+* Set various flags pertaining to motor operation
+
+ISRs should avoid doing:
+* Memory heavy tasks
+* Complex arithmetic operations
+* Transfferring data from ADC/DMA/SRAM
+* Reading/processing/manipulating sampling data
+* Updating the motor machine state
+These above tasks should remain in the main program or FreeRTOS enviroment, rather than being executed by an ISR to keep them short and predictable.
+
+Of course digital signal processing (DSP) should be done (which occurs in the main part of the program and *NOT* an interrupt). DSP is much easier to fix and
+correct than analogue signal. DSP are usually 0 "off" or 1 "on," determined by a threshold of some measure; in this design case, it would be based on a voltage.
+If too much noise is added to a signal, exceeding our threshold, we will be unable to get a signal with perfect/good fidelity. As the signal is a measurement that
+is voltage which is proportional to the postion error; the RP2040 must respond appropriately, otherwise,
+Faults that could occur with no DPS:  
+* Undefined behaviour between toggling clockwise or counterclockwise rotation of motor
+* False triggers/flags set by the various peripherals
+* Violation of response time constraints
+
+
 
 
 ### 4. Motor Control
@@ -231,3 +264,5 @@ ECE315 Lecture Notes
 [6] https://pip-assets.raspberrypi.com/categories/814-rp2040/documents/RP-008371-DS-1-rp2040-datasheet.pdf?disposition=inline   
 [7] https://forums.raspberrypi.com/viewtopic.php?p=1861895#p1861895   
 [8] https://embedded.fm/blog/2017/3/21/ping-pong-buffers   
+[9] https://electronics.stackexchange.com/questions/469121/why-should-interrupts-be-short-in-a-well-configured-system   
+[10] https://medium.com/trading-data-analysis/start-setting-thresholds-like-a-pro-c58e611fb0cb
