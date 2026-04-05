@@ -19,7 +19,6 @@ other designers and their experimental observations, and utilizing new technolog
 evaluating the limitations of different hardware in real-time, and theoretical extraction from various online sources.  
 
 ## System Overview
-<Write a brief overview of the system architecture and include a block diagram. An example is provide below. Make sure to identify and describe each node and component on the diagram. A table may be used for this>
 In this excersise, we are designing a single, simple embedded system that takes a voltage analogue signal from an error measurement sensor, that is constantly 
 sampling the rotation (movement) of a motion platform. From this analogue signal (a single input control signal), it is then passed to a motion controller, where
 it first goes through a low-pass filter (to assit in aliasing), in which the sampled data is then sorted and blocked by a DMA & ADC. The MCU, which in this
