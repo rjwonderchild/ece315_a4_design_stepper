@@ -197,6 +197,18 @@ Table 1.1 Comparison of CPU polling, ADC/DMA block interrupt, ADC/DMA buffer int
   </tbody>
 </table>
 
+**Part 3.2** 
+For this system, as previously mentioned would be the ADC/DMA with half-buffer and full-buffer interrupts. This is essentially saying the 1 block (16 samples) is
+one half-buffer, while an additional makes a full buffer (total of 32 samples). The processing of the first interrupt happens at $$T_{block} = \frac{16 \space samples}{8 kS/s} = 2 ms$$ which aligns with the specified design constraint, while also giving continous sampling.  
+The DMA moves data from the ADC to SRAM without needing the CPU, only interrupting when data is ready to be processed, resulting in parallel operations between 
+the devices. Results in CPU load remaining low (much lower than direct polling). This comes with an added cost to the complexity of the implementation (along with
+using slightly more hardware), as the designer now needs to keep track of the varios interrupts from the DMA, track of the state machine and buffer states, ensure
+proper data processing. Finally, this solution emobdies the embedded system design in which it is continously sampling (as the DMA does not need to stop with two
+buffers), CPU and DMA work in parallel, no risk of stopping data acquistion while a block is processing by the CPU; results in the most accurate & logical decisions based on input from ADC.  
+
+**Part 3.3**
+
+
 ### 4. Motor Control
 
 ### 5. Feasibility and CPU Budget Analysis
