@@ -45,58 +45,58 @@ purpose of each of the nodes and components shown in Figure 1 are summarize in T
   <tbody>
     <tr>
       <td>Motion Controller</td>
-      <td>Row 1, Cell 2</td>
-      <td>Row 1, Cell 3</td>
+      <td>Both</td>
+      <td>Responsible for the processing of sampling data, logic decisions, configuration of devices, and overall control of system</td>
     </tr>
     <tr>
       <td>Low-Pass Aliasing Filter</td>
-      <td>Row 2, Cell 2</td>
-      <td>Row 2, Cell 3</td>
+      <td>HW</td>
+      <td>Filters out unwanted frequency (< 2kHz), prevents major attenuation of aliasing in analogue signal from being processed</td>
     </tr>
     <tr>
       <td>ADC</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
+      <td>HW</td>
+      <td>Responsible for converting the filtered voltage signal from analogue to digital so that the MCU and DMA can utilize the data</td>
     </tr>
     <tr>
       <td>DMA</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
+      <td>HW</td>
+      <td>Processes the data from the ADC into blocks on the SRAM, sends IRQ's to the CPU to let it know that data is ready to be used</td>
     </tr>
     <tr>
       <td>MCU</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
+      <td>Both</td>
+      <td>The RP2040 is responsible for all the logic, threshold, and motor control decisions, as well as intializing all the various componenets</td>
     </tr>
     <tr>
       <td>GPIO</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
+      <td>Both</td>
+      <td>The path that the output pulse signals are sent to the Motion Platform (digital output interface); signals consist of STEP and DIR</td>
     </tr>
     <tr>
       <td>Motion Platform</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
+      <td>HW</td>
+      <td>The device responsible for the physical movement of the platform. Includes the motor driver and stepper motor iteself</td>
     </tr>
     <tr>
-      <td>Motion Platform</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
+      <td>A4988 Motor Driver</td>
+      <td>HW</td>
+      <td>Utilizies the A4988 motor driver, receives digital signal from GPIO of motion controller, powers the respective coils on the stepper motor</td>
     </tr>
     <tr>
-      <td>Motion Platform</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
+      <td>Stepper Motor</td>
+      <td>HW</td>
+      <td>Responsible for the actual actuation of the platform</td>
     </tr>
     <tr>
-      <td>Motion Platform</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
+      <td>Analogue Sensor Module</td>
+      <td>HW</td>
+      <td>Measures the voltage signal induced from the changes in the movement of the platform</td>
     </tr>
     <tr>
-      <td>Motion Platform</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
+      <td>Position Error Measurement</td>
+      <td>FW</td>
+      <td>An analogue voltage signal that is proportional to the error measured in the rotation of the shaft (steps). Signal is sent to the low-pass filter and ADC</td>
     </tr>
   </tbody>
 </table>
