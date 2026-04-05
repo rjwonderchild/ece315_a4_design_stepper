@@ -161,7 +161,33 @@ Recall some critical constraints for the design:
 2. CPU must remain at 70% availability for unrelated application tasks
 
 **Part 3.1**  
-
+Table 1.1 Comparison of CPU polling, ADC/DMA block interrupt, ADC/DMA buffer interrupts
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>HW or FW</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Row 1, Cell 1</td>
+      <td>Row 1, Cell 2</td>
+      <td>Row 1, Cell 3</td>
+    </tr>
+    <tr>
+      <td>Row 2, Cell 1</td>
+      <td>Row 2, Cell 2</td>
+      <td>Row 2, Cell 3</td>
+    </tr>
+    <tr>
+      <td>Row 3, Cell 1</td>
+      <td>Row 3, Cell 2</td>
+      <td>Row 3, Cell 3</td>
+    </tr>
+  </tbody>
+</table>
 
 ### 4. Motor Control
 
