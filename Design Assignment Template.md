@@ -1,6 +1,7 @@
 #ECE 315 – Design Assignment: Real-Time Data Acquisition 
 
-<any text between angle brackets is informational and should be deleted in the final version of the report.>
+## Author
+Riley Whitford (whitfor1)
 
 ## Introduction
 <summarize the problem, objectives, and approach to this assignment>
@@ -380,7 +381,9 @@ increased complexity, that was slightly save with the choice of the direct drive
 
 ## AI Usage Declaration
 
-<Please indicate if you used an AI to help with this assignment and if so, what insights you gained; for example how it helped you understand this assignment>
+Yes, AI was used to help complete this assignment. I found that because this assignment was tying so many topics together that we were exposed to and learned 
+throughout the course, I found that AI was immensely helpful in locating the correct sources within the note packages, but also for sourcing additional resources 
+as seen in the resources section. 
 
 ## Resources
 
