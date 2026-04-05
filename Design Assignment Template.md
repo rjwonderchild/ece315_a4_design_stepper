@@ -258,7 +258,7 @@ For this design, we choose the A4988. This is because:
 * Current limiting
 * Coils controlled automatically by driver
 
-**Part 4.1** 
+**Part 4.1**  
 The two pins required for control signals on the driver are:
 * STEP - A pulse on this pin would advance the motor by one step (depending on configured step size)
 * DIR - Would most likely be a signal set low or set high to enable direction of roration for the step(s)
@@ -286,7 +286,12 @@ delay functions that lie within, turning the pin 'on' and 'off' to simulate a ps
 
 **Part 4.3**  
 We will utilize the formula:  
-$$Pulse \space Frequency \space = steps \space per \space revolution \space \times \space revolutions \space per \space second$$
+$$Pulse \space Frequency \space = steps \space per \space revolution \space \times \space revolutions \space per \space second$$  
+$$Pulse \space Frequency \space = \frac{steps \space per \space revolution \space \times \space revolutions \space per \space minute}{60}$$  
+$$Pulse \space Frequency \space = \frac{200 \cdot 120}{60 \space seconds}$$  
+$$Pulse \space Frequency \space = 400 Hz$$  
+
+Thus the RP2040 would need to generate 400 step pulses per second.
 
 
 
