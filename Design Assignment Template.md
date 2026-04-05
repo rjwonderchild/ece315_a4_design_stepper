@@ -174,25 +174,25 @@ Table 1.1 Comparison of CPU polling, ADC/DMA block interrupt, ADC/DMA buffer int
   </thead>
   <tbody>
     <tr>
-      <td>Row 1, Cell 1</td>
-      <td>Row 1, Cell 2</td>
-      <td>Row 1, Cell 3</td>
-      <td>Row 1, Cell 4</td>
-      <td>Row 1, Cell 5</td>
+      <td>CPU polling of ADC results</td>
+      <td>Direct polling from CPU to ADC would result in 100% load during sampling, constant block of other tasks, overhead completely consumed</td>
+      <td>Would result in immediate processing, latency would be negligible, thus continous sampling but always blocking, processing window is minimal</td>
+      <td>Simplest implementation, CPU directly polls, no DMA or interrupts to worry about. Timing is a smaller issue. Priority inversion occurs however.</td>
+      <td>The robustness is poor, as this implementation is inherently problematic to priority inversion, CPU will get stuck polling for data, causing process/task starvation</td>
     </tr>
     <tr>
-      <td>Row 2, Cell 1</td>
-      <td>Row 2, Cell 2</td>
-      <td>Row 2, Cell 3</td>
-      <td>Row 2, Cell 4</td>
-      <td>Row 2, Cell 5</td>
+      <td>ADC/DMA with an interrupt at end of each block</td>
+      <td>Lower CPU utilization, CPU is sleeping or doing other tasks until IRQ is fired from DMA. Would result in loss of data between reading of data and reconfiguration</td>
+      <td>Sampling almost continous, though loss of data may occur when block is full. Latency would be up to $$\frac{N}{f_s}$$, more than polling</td>
+      <td>Complexity is moderate, increases due to the use of a DMA. Requires use of interrupts for data processing and transferring. Use 1 DMA channel. Need to watch FIFO for overflow</td>
+      <td>Robustness is better, usually a defacto standard. Allows for minimal missing of data (in this case for a motor, the odd sample missed is not critical). Works appropriately for an embedded system.</td>
     </tr>
     <tr>
-      <td>Row 3, Cell 1</td>
-      <td>Row 3, Cell 2</td>
-      <td>Row 3, Cell 3</td>
-      <td>Row 3, Cell 4</td>
-      <td>Row 3, Cell 5</td>
+      <td>ADC/DMA with half-buffer and full-buffer interrupts</td>
+      <td>Lower CPU utilization, CPU would be able to do other tasks until IRQ is fired for half buffer (16-samples), while other buffer is filled by DMA.</td>
+      <td>Would collect data much closer to direct polling, continous. Latency would result from $$\frac{N}{2f_s}$$ as this is a double buffer, would result in double the IRQ's compared to strategy 2</td>
+      <td>Most complex solution, requires multiple interrupts due to use of 2 buffer solution. Uses 2 DMA channels. No FIFO overflow risk as DMA is always working.</td>
+      <td>This solution has the best robustness for a Real-time system. It decouples the data sampling/colletion/transfer completely away from CPU. Utilizes DMA to fuller extent. Prevents task inversion and CPU starvation</td>
     </tr>
   </tbody>
 </table>
