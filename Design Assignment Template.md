@@ -291,8 +291,13 @@ $$Pulse \space Frequency \space = \frac{steps \space per \space revolution \spac
 $$Pulse \space Frequency \space = \frac{200 \cdot 120}{60 \space seconds}$$  
 $$Pulse \space Frequency \space = 400 Hz$$  
 
-Thus the RP2040 would need to generate 400 step pulses per second.
+Thus the RP2040 would need to generate 400 step pulses per second.  
 
+**Part 4.4**
+Since a full step now requires 8 microsteps, the number of microsteps required to complete a revolution with 200 steps is:  
+$$200 \space Steps \space per \space revolution \space  \times \space 8 \space microsteps \space = 1600 \space microsteps \space per \space revolution$$  
+Now, we need to rotate the shaft twice, as with full stepping:  
+$$Pulse \space Frequency \space = 1600 \space microsteps \space per \space revolution \space \times 2 \space revolutions \space per \space second \space = \space 3200 Hz$$.
 
 
 
