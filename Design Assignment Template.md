@@ -297,9 +297,17 @@ Thus the RP2040 would need to generate 400 step pulses per second.
 Since a full step now requires 8 microsteps, the number of microsteps required to complete a revolution with 200 steps is:  
 $$200 \space Steps \space per \space revolution \space  \times \space 8 \space microsteps \space = 1600 \space microsteps \space per \space revolution$$  
 Now, we need to rotate the shaft twice, as with full stepping:  
-$$Pulse \space Frequency \space = 1600 \space microsteps \space per \space revolution \space \times 2 \space revolutions \space per \space second \space = \space 3200 Hz$$.
+$$Pulse \space Frequency \space = 1600 \space microsteps \space per \space revolution \space \times 2 \space revolutions \space per \space second \space = \space 3200 Hz$$  
+Thus, the RP2040 would need to pulse at 3200 Hz to have the same rotation speed as with full stepping.  
 
-
+**Part 4.5**
+As discussed previously, jitter can be introduced multiple different ways; from noisy signals to bad coding practicing/implementations (such as ISRs taking too 
+long!). Delay in pulse generation would essentially be simulating timing jitter in this case. Should the pulses (or delays in our implemenation) not have a 
+continous and even spacing, the pulses will arrive to the driver sporadically. This will cause the motor to exhibit:
+* Jerky movement
+* Speed inconsistencies
+* Position error creep (result in out of bound parameters)
+* Induce resonance in the system (vibration, heat, premature wear)
 
 ### 5. Feasibility and CPU Budget Analysis
 
