@@ -27,7 +27,7 @@ control of the Motion Platform. This is achieved by creating a pseudo PWM throug
 steps, and direction signals are sent to the motor driver (A4988) inside the Motion Platform, which then drivers the stepper motor. We can see a system
 architecture diagram in Figure 1.  
 
-![An example system deployment diagram using UML2](images/Block_Diagram.png)  
+![Block diagram for the System Design UML2](images/Block_Diagram.png)  
 **Figure 1** Block diagram for the embedded ADC motion controller. The main boxes encompass the three major components; Analogue Sensor Module, Motion Platform, and the Motion Controller. Inside the main devices reside the specific components that are required to operate the device and interpret data between them. The purple dashed lines represent data transfer, while the solid light purple represents a physical signal connection. The *leafs* connected to each main component are parameters, tasks, or signals asscociated with each component.  
 
 As mentioned in the introduction, the main function of the system is to control motor rotation direction based on a single input control signal. The name and 
