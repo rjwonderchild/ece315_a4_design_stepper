@@ -328,14 +328,55 @@ $$500 \space events \space per \space second \space \times \space 168 \mu s = 84
 Which equates to 84ms. In one second (1000 ms), we have a usage of:  
 $$\frac{84ms}{1000ms}=0.084=8.4%$$  
 CPU that is available:  
-
-$$ 100%-8.4%=91.6% $$ available. Thus, the CPU remains well above the 70% required.  
+100% - 8.4% = 91.6% available. Thus, the CPU remains well above the 70% required.  
 
 Should the CPU not make that requriement; one could increase the block size to reduce ISR frequency, improve software implementation for the misc routine costs,
-or lower the sampling rate at the cost of fidelity.
+or lower the sampling rate at the cost of fidelity. 
 
-### 6. System-Level Design Tradeoffs
+### 6. System-Level Design Tradeoffs  
 
+**Part 6.1**
+The design of this system is a very *basic close-loop control system,* as we are sampling a sensor that produces an analogue voltage proportional to the position 
+error, and thus sending a command to the motor to respond. In embedded system design, it is important to determine whether an *open-loop or closed-loop control 
+system* is more appropriate depending on the application. An open loop provides:
+* Design and implementaiton remain simply and easy
+* Low cost and minimal maintenance
+* Fast system operation
+* Suitable where high accuracy is not required
+
+While a closed loop provides:  
+* High accuracy and precise system output
+* Reduces effect of external disturbances and parameter variations
+* Suitable for applications that require a high level of accuracy and control
+* Improves overall system stability and performance
+* Corrects errors through the feedback mechanisim
+
+Clearly, one could see that implementing the closed loop system would be much more expensive resource & cost wise, have a higher complexity ceiling, and would 
+most likely operate slower than the open-loop design. Because our system is meant to control an important platform (whether this is fine tuning a CNC machine, 
+3D printer, or even an elevator, precise motion and accuracy is required, and thus is appropriate for this problem. We can see throughout the design process that
+while this did add more complexity, it was not at a large cost overall to the design compared to forgoing as one would with an open system. It is important to 
+note however, that the commands that are sent to the motor by the CPU are more akin to the open-loop control, as there is no direct measurement of the shaft 
+position itself. By adding an encoder, the accuracy of movement could potentially be increased expotentially, and would allow the system to confirm whether the 
+platform had actually moved, detect errors in the stepping of the motor such as; stalling, overcorrection from threshold, and allow the system to operate in a 
+more reliable fashion, thus increasing the robustness of the system.  
+
+**Part 6.2**  
+For a fast reponse, we would want to process smaller data blocks, increase the sampling rate, or increase the CPU speed. However, if we forgo increasing CPU speed
+we would start to expotentially increase the CPU load, thus increasing power consumption, and decreasing availbility/overhead. As we seen throughout the design
+section, to keep the CPU load low, we can use different memory-mapped perhipheral processes such as using a DMA rather than polling, tighten interrupts to be 
+short, and use larger sample blocks. But with these lowered CPU costs inadverntently increases the latecny of the system, and simulatenously increases the 
+complexity of it. A simple implementation would be to stick to a polling system or end of block interrupt (at the cost of increased CPU activity), use software to
+implement control of systems, rather than rely on specialized hardware componenents (DMA, FPU, etc.).  
+
+By the current design implementation, we utilize a DMA to lower the CPU load, use a two buffer interrupt system to ensure data integrity/sampling to improve the
+latency, a moderately fast sampling rate with moderate size blocking to strike a balance between CPU load and response time. We implemented this at the cost of 
+increased complexity, that was slightly save with the choice of the direct drive A4988 motor driver, that realistically only requires to logic pins.  
+
+**Part 6.3**
+* If a missed interrupt occured, the sampling data may not have been processed, which would lead to accumalated error in platform position
+* A DMA buffer overrun (CPU handling of samples per second) would result in errenous commands to motor and further accumulation of error in platform position
+* If the ADC rate was insufficient, we may see increase in aliasing, dropping of fidelity, threshold signal is too unpredictable
+* Timing inaccuracies of motor, such as calculations for STEP or STEP_DELAY would result in motor jitter from the failure of the pulse timing
 
 ## AI Usage Declaration
 
@@ -358,5 +399,6 @@ ECE315 Lecture Notes
 [12]  https://www.handsontec.com/dataspecs/L298N%20Motor%20Driver.pdf  
 [13] https://www.reddit.com/r/arduino/comments/jn6zeg/how_to_chose_the_right_motor_driver/   
 [14] https://forum.pololu.com/t/which-to-use-l298n-h-bridge-or-the-a4988-stepper-motor-driver-carrier/9868  
+[15] https://www.geeksforgeeks.org/electronics-engineering/difference-between-open-loop-control-system-and-closed-loop-control-system/
 
 
