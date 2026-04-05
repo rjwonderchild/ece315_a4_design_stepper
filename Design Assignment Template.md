@@ -393,8 +393,7 @@ increased complexity, that was slightly save with the choice of the direct drive
 ## AI Usage Declaration
 
 Yes, AI was used to help complete this assignment. I found that because this assignment was tying so many topics together that we were exposed to and learned 
-throughout the course, I found that AI was immensely helpful in locating the correct sources within the note packages, but also for sourcing additional resources 
-as seen in the resources section. 
+throughout the course, that I found with using AI was immensely helpful in locating the correct sources within the note packages, but also for sourcing additional resources online as seen in the resources section. I would communicate back and forth with AI, usually by suggesting a solution I had, and cross referencing with it if I had missed any glaring parameters. For example, in the memory-mapped peripheral section,
 
 ## Resources
 
