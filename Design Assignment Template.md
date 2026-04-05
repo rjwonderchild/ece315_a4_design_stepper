@@ -272,7 +272,7 @@ inserted to remain low; also to be set through GPIO on the RP2040 -- this would 
 
 RESET/SLEEP are usually jumped together.  
 
-**Part 4.2**
+**Part 4.2**  
 For this current design, we will opt with GPIO bit control (mostly because this is what I saw in lecture!) which also utilizes memory-mapped peripheral access 
 (the GPIO pins being set on the API).  
 We would first set the required GPIO pins on the RP2040 (5 total here for DIR, STEP, MS1/2/3), to be all digital outputs, and thus we would then set all pins to 
@@ -284,9 +284,9 @@ from the microstep bitmasking function. Finally, a step delay would need to be c
 to create the perceived rotation (essentially, this controls the speed). This cumlulates into the STEP signal which is driven high based on the direction and 
 delay functions that lie within, turning the pin 'on' and 'off' to simulate a psuedo PWM.  
 
-**Part 4.3**
+**Part 4.3**  
 We will utilize the formula:  
-$$Pulse \space Frequency \space = steps \space per \space revolution \space \times \space revolutions \space per \space second
+$$Pulse \space Frequency \space = steps \space per \space revolution \space \times \space revolutions \space per \space second$$
 
 
 
