@@ -50,7 +50,7 @@ Each of the main design tasks related to the architecture are summarized in the 
 Recall design constraints for ADC and sampling:
 1. Analogue input bandwidth: 0-2 kHz
 
-**Part 1.1**
+**Part 1.1**  
 With these constraints in mind, we first find the minimum sampling rate. Here, we apply Nyquist-Shannon Sampling Theorem, which states bandlimited frequencys with
 $f_{max}$ can be reconstructed perfectly where: $$f_s \geq 2 f_{max}$$, and need anti-aliasing filters to ensure $$\frac{f_s}{2} \geq f_{max}$$. Apply rule-of-
 thumb: sample **2-10x** $f_{max}$ for margin & filter roll-off.
@@ -61,7 +61,7 @@ thumb: sample **2-10x** $f_{max}$ for margin & filter roll-off.
 * The new Nyquist Frequency is $$f_N \geq \frac{f_s}{2}$$, thus $$f_N = \frac{6 kS/s}{2} = 3 kS/s = 3 kHz
 * Rate was choosen to help with design overhead (margin), reduce aliasing folding, use of anti-alias filter, keep system cost low
 
-**Part 1.2**
+**Part 1.2**  
 We are then told the ADC samples 4 analogue channels in roun-robin mode, need to determine an effective per-channel sampling rate. We note that for the RP2040,
 the ADC is set for muliple inputs and can utilize round-robin sampling. From the documentaiton, the RP2040 has only one ADC FIFO, so the sample from each source
 (channel) are placed into the FIFO in an interleaved fashion, which must later be de-interleaved.
@@ -76,7 +76,7 @@ the ADC is set for muliple inputs and can utilize round-robin sampling. From the
   is affected by the resolution (bit depth), time (sampling rate, jitter), noise (thermal), etc. Thus, by increaseing the sample rate for the per channel, the
   fidelity increases, and minimizes distortion.
 
-**Part 1.3**
+**Part 1.3**  
 Anti-aliasing filters are almost always recommended for ADC sampling, pickup from stray signals (powerline frequency or even local radio stations!) may contain
 such frequencies higher than the Nyquist Frequency, and thus these frequencies may alias into the appropriate frequency range.
 
@@ -96,7 +96,7 @@ We also note that the digital output range is approximately $$[-2^{N-1}, 2^{N-1}
 4. The RP2040 DMA features are: 12 independent DMA channels, separate read/write bus masters, transfer 8/16/32-bit words with one read+write per cycle, supports
    paced (TREQ), and 100s MB/s throughput.
 
-**Part 2.1**
+**Part 2.1**  
 Reviewing the RP2040 data sheet, the ECE315 Lecture notes, we find that the ADC will continously be sampled, where the sample data is pushed to the ADC FIFO,
 and then the DMA moves the data from the FIFO to a RAM buffer, and when a block is full the DMA signals to the CPU with an interrupt.
 
@@ -115,7 +115,7 @@ and then the DMA moves the data from the FIFO to a RAM buffer, and when a block 
 * A transfer will be completed when the signal of the BUSY bit is set to 0, and TRANS_COUNT is set to 0. We can raised and IRQ (set IRQ_QUIET to 0) to let CPU
 know that the sample block is ready.
   
-**Part 2.2**
+**Part 2.2**  
 DMAs are used to transfer large amounts of data without CPU involvement. The RP2040 specifically allows for transfers of Memory-to-Peripheral, Memory-to-Memory,
 Peripheral-to-Peripheral. In this particular design, the CPU only needs to intialize the DMA once at the beginning, where the DMA then handles all the sampling 
 data transfer from the FIFO to the SRAM. When the data is ready to be processed, an interrupt is sent to the CPU. This is preferable, as if the CPU had to 
@@ -131,7 +131,7 @@ othe CPU tasks. Thus the benefits of DMA are:
 * Faster Data transfers
 * Improved system performance
 
-**Part 2.3**
+**Part 2.3**  
 As noted above, we have choosen our sample block size to be $$N = 16$$ samples. To further reduce overhead, and ensure we meet time constraints while constantly 
 sampling, we will utilize a dual buffer design. Dual buffer, also known as *"PING PONG Buffers,"* which is a lot like a 2-element circular buffer. The process of
 sampling then becomes: Processor receives DataReady interrupt from DMA, DMA sends a read to ADC for enough bytes to transfer one sample; where both these 
@@ -145,7 +145,7 @@ Advantages are:
 * CPU and DMA work in parallel
 * Overrun and data loss is minimized (as sampling would stop for brief periods in a cycle)
 
-**Part 2.4**
+**Part 2.4**  
 
    
 <Show a UML messaging diagram that illustrates the interaction between the ADC, DMA peripheral, and CPU>
