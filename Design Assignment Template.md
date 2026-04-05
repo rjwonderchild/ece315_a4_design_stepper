@@ -103,8 +103,8 @@ and then the DMA moves the data from the FIFO to a RAM buffer, and when a block 
   data at address *0x21000000*
 * The transfer sizes that the RP2040 can handle are 8/16/32-bit transfers. The ADC samples at a resolution of 12-bits, thus we set the transfer sizes to 16-bits
   which allows for headroom. Thus we are utilizing *half-word* transfers
-* For the block size, we consider the per-channel sample rate and allowed latency: $$T_{block} = \frac{N}{f_s}$$ which equates too: $$\frac{N}{8 kS/s} \lte 2 ms$$
-  $$N \lte 16$$. Thus, we will set N (buffer size(s)) to be 16 samples
+* For the block size, we consider the per-channel sample rate and allowed latency: $$T_{block} = \frac{N}{f_s}$$ which equates too: $$\frac{N}{8 kS/s} \leq 2 ms$$
+  $$N \leq 16$$. Thus, we will set N (buffer size(s)) to be 16 samples
 * The ADC is continously samping, and thus the DMA should transfer after the DMA channels are configured, ADC FIFO is enabled, and DMA controls registers are properly configured. For our design, we set the EN to 1 which allows the DMA to respond to triggering events, while also setting TREQ_SEL to handle pacing of the DMA with the CPU (Handled by DREQ_ADC = 36). Transfer will occur when the block is 'filled.' A transfer is signalled when BUSY (Bit 24) is 1 and TRANS_COUNT > 0.
 * A transfer will be completed when the signal of the BUSY bit is set to 0, and TRANS_COUNT is set to 0. We can raised and IRQ (set IRQ_QUIET to 0) to let CPU know that the sample block is ready.
   
